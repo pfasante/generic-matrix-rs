@@ -6,6 +6,7 @@
 
 extern crate num;
 
+use std::fmt::{Display, Formatter, Result};
 use std::ops::{Add, Index, Mul, Sub};
 use num::{One, Zero};
 
@@ -75,6 +76,23 @@ impl<T: Clone> Matrix<T> {
     /// Returns transpose of the matrix.
     pub fn trans(&self) -> Matrix<T> {
         Matrix::from_fn(self.column(), self.row(), |i, j| self[(j, i)].clone())
+    }
+}
+
+impl<T: Display> Display for Matrix<T> {
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        let mut res = write!(f, "");
+        let (row, col) = self.size();
+
+        for i in 0..row {
+            // write matrix content
+            for j in 0..col {
+                res = res.and(write!(f, "{} ", self[(i, j)]));
+            }
+            res = res.and(write!(f, "\n"));
+        }
+
+        res
     }
 }
 
